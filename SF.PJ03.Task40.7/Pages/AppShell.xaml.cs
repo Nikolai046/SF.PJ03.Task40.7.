@@ -1,4 +1,4 @@
-﻿namespace SF.PJ03.Task40._7_.Resources.Pages
+﻿namespace SF.PJ03.Task40._7_.Pages
 {
     public partial class AppShell : Shell
     {

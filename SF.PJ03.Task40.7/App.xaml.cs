@@ -1,4 +1,4 @@
-﻿using SF.PJ03.Task40._7_.Resources.Pages;
+﻿using SF.PJ03.Task40._7_.Pages;
 
 namespace SF.PJ03.Task40._7_
 {
