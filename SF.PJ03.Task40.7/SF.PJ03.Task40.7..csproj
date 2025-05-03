@@ -63,6 +63,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\GalleryPage.xaml.cs">
+	    <DependentUpon>GalleryPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\SignInPage.xaml.cs">
 	    <DependentUpon>SignInPage.xaml</DependentUpon>
 	  </Compile>
@@ -72,6 +75,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\GalleryPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\SignInPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

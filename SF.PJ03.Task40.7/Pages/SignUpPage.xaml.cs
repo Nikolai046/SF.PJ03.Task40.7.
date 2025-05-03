@@ -1,4 +1,7 @@
-﻿namespace SF.PJ03.Task40._7_.Pages
+﻿using System.Security.Cryptography;
+using System.Text;
+
+namespace SF.PJ03.Task40._7_.Pages
 {
     public partial class SignUpPage : ContentPage
     {
@@ -40,7 +43,7 @@
             if (isPinComplete && _nonConfirmedPin != null)
             {
                 var isPinValid = pin == _nonConfirmedPin;
-                pinLabelText.Text = isPinValid ? "PIN-код принят" : "PIN-код не совпадает";
+                pinLabelText.Text = isPinValid ? "PIN-код сохранен" : "PIN-код не совпадает";
                 pinLabelText.TextColor = isPinValid ? Colors.Green : Colors.Red;
 
                 if (!isPinValid)
@@ -48,8 +51,14 @@
                     await Task.Delay(2000);
                     InitializePage();
                 }
-                await SecureStorage.Default.SetAsync("UserPin", pin);
-                this.Title = "Обновленный заголовок";
+                else
+                {
+                    // Создаем хэш
+                    var pinHashинBytes = SHA256.HashData(Encoding.UTF8.GetBytes(pin));
+                    var pinHash = Convert.ToHexString(pinHashинBytes);
+                    await SecureStorage.Default.SetAsync("UserPin", pinHash);
+                    this.Title = "Запускаем приложение";
+                }
             }
         }
 

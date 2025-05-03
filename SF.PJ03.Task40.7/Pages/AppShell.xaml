@@ -7,8 +7,4 @@
     Shell.FlyoutBehavior="Disabled"
     Title="Галерея">
 
-    <ShellContent
-        ContentTemplate="{DataTemplate pages1:SignUpPage}"
-        Route="SignUpPage" />
-
 </Shell>
