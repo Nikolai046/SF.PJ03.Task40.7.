@@ -3,14 +3,12 @@
     x:Class="SF.PJ03.Task40._7_.Pages.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pages="clr-namespace:SF.PJ03.Task40._7_.Resources.Pages"
     xmlns:pages1="clr-namespace:SF.PJ03.Task40._7_.Pages"
     Shell.FlyoutBehavior="Disabled"
-    Title="SF.PJ03.Task40._7_">
+    Title="Галерея">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate pages1:MainPage}"
-        Route="MainPage" />
+        ContentTemplate="{DataTemplate pages1:SignUpPage}"
+        Route="SignUpPage" />
 
 </Shell>

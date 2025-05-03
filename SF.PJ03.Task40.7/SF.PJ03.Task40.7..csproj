@@ -63,15 +63,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\StartPage.xaml.cs">
-	    <DependentUpon>StartPage.xaml</DependentUpon>
+	  <Compile Update="Pages\SignInPage.xaml.cs">
+	    <DependentUpon>SignInPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\SignUpPage.xaml.cs">
+	    <DependentUpon>SignUpPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Pages\StartPage.xaml">
+	  <MauiXaml Update="Pages\SignInPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\SignUpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
 	</ItemGroup>
 
 </Project>
