@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SF.PJ03.Task40._7_.Pages;
 
@@ -55,8 +51,8 @@ public partial class SignInPage : ContentPage
             }
             else
             {
-                this.Title = "Запускаем приложение";
-                await Shell.Current.GoToAsync("//GalleryPage");
+                //this.Title = "Запускаем приложение";
+                await Shell.Current.GoToAsync("GalleryPage", true);
             }
         }
     }
