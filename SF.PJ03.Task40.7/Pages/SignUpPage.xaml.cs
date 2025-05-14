@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using SF.PJ03.Task40._7_.Models;
 
 namespace SF.PJ03.Task40._7_.Pages
 {
@@ -59,8 +60,21 @@ namespace SF.PJ03.Task40._7_.Pages
                     await SecureStorage.Default.SetAsync("UserPin", pinHash);
                     await Task.Delay(2000);
                     this.Title = "Запускаем приложение";
-                    if (Application.Current != null)
-                        Application.Current.MainPage = new NavigationPage(new GalleryPage());
+
+                    // Получаем сервис через контейнер зависимостей
+                    var mauiContext = Application.Current.Handler.MauiContext;
+                    var galleryService = mauiContext.Services.GetService<IGalleryService>();
+
+                    if (galleryService == null)
+                    {
+                        await DisplayAlert("Ошибка", "Не удалось загрузить галерею.", "OK");
+                        return;
+                    }
+
+                    // Создаем экземпляр GalleryPage с внедренным сервисом
+                    var galleryPage = new GalleryPage(galleryService);
+
+                    if (Application.Current != null) Application.Current.MainPage = new NavigationPage(galleryPage);
                 }
             }
         }

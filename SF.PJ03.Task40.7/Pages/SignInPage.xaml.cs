@@ -1,5 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using SF.PJ03.Task40._7_.Models;
+using SF.PJ03.Task40._7_.Services;
 
 namespace SF.PJ03.Task40._7_.Pages;
 
@@ -9,6 +11,7 @@ public partial class SignInPage : ContentPage
     private readonly Color _emptyColor = Colors.Transparent;
     private string? storedPinHash;
     private readonly Border[] _pinDots;
+
 
     public SignInPage()
     {
@@ -51,8 +54,21 @@ public partial class SignInPage : ContentPage
             }
             else
             {
-                //this.Title = "Запускаем приложение";
-                if (Application.Current != null) Application.Current.MainPage = new NavigationPage(new GalleryPage());
+
+                // Получаем сервис через контейнер зависимостей
+                var mauiContext = Application.Current.Handler.MauiContext;
+                var galleryService = mauiContext.Services.GetService<IGalleryService>();
+
+                if (galleryService == null)
+                {
+                    await DisplayAlert("Ошибка", "Не удалось загрузить галерею.", "OK");
+                    return;
+                }
+
+                // Создаем экземпляр GalleryPage с внедренным сервисом
+                var galleryPage = new GalleryPage(galleryService);
+
+                if (Application.Current != null) Application.Current.MainPage = new NavigationPage(galleryPage);
 
                 //await Shell.Current.GoToAsync("GalleryPage", true);
             }

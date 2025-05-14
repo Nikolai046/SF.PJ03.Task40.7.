@@ -1,22 +1,23 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Input;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 using SF.PJ03.Task40._7_.Models;
-#if ANDROID
-using Android.Provider;
-using Android.Database;
-using Android.Content;
-#endif
+using SF.PJ03.Task40._7_.Services;
 
 namespace SF.PJ03.Task40._7_.Pages;
 
-public partial class GalleryPage : ContentPage, INotifyPropertyChanged
+public partial class GalleryPage : ContentPage
 {
+    private readonly IGalleryService _galleryService;
+
     private ObservableCollection<ImageItem> _images;
     public ObservableCollection<ImageItem> Images
     {
         get => _images;
         set
         {
+            if (_images == value) return;
             _images = value;
             OnPropertyChanged(nameof(Images));
         }
@@ -28,17 +29,44 @@ public partial class GalleryPage : ContentPage, INotifyPropertyChanged
         get => _selectedImage;
         set
         {
+            if (_selectedImage == value) return;
             _selectedImage = value;
             OnPropertyChanged(nameof(SelectedImage));
-            // Можно добавить логику для активации/деактивации кнопок
+            OnPropertyChanged(nameof(IsImageSelected));
+            ImageCollectionView.SelectedItem = value;
+
         }
     }
 
-    public GalleryPage()
+    private bool _isLoading;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set
+        {
+            if (_isLoading == value) return;
+            _isLoading = value;
+            // OnPropertyChanged(nameof(IsLoading));
+        }
+    }
+    public ICommand SelectImageCommand { get; }
+    public bool IsImageSelected => SelectedImage != null;
+
+    public GalleryPage(IGalleryService galleryService)
     {
         InitializeComponent();
+        _galleryService = galleryService;
         Images = new ObservableCollection<ImageItem>();
         BindingContext = this;
+        SelectImageCommand = new Command(ExecuteSelectImage);
+    }
+
+    private void ExecuteSelectImage(object param)
+    {
+        if (param is ImageItem image)
+        {
+            SelectedImage = image;
+        }
     }
 
     protected override async void OnAppearing()
@@ -49,135 +77,113 @@ public partial class GalleryPage : ContentPage, INotifyPropertyChanged
 
     private async Task RequestAndLoadImages()
     {
-        var readPermission = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-        if (readPermission != PermissionStatus.Granted)
-        {
-            readPermission = await Permissions.RequestAsync<Permissions.StorageRead>();
-        }
+        IsLoading = true;
 
-        // WRITE_EXTERNAL_STORAGE - для MediaStore.delete менее критично, чем READ_EXTERNAL_STORAGE для чтения.
-        // Но оставим на случай, если какие-то операции его все же требуют на старых API.
-        var writePermission = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-        if (writePermission != PermissionStatus.Granted)
+        try
         {
-            writePermission = await Permissions.RequestAsync<Permissions.StorageWrite>();
-        }
+            // Для Android 13+ (API 33+) используем новые разрешения
+            if (DeviceInfo.Platform == DevicePlatform.Android && DeviceInfo.Version.Major >= 13)
+            {
+                var readMediaResult = await Permissions.CheckStatusAsync<Permissions.Photos>();
+                if (readMediaResult != PermissionStatus.Granted)
+                {
+                    readMediaResult = await Permissions.RequestAsync<Permissions.Photos>();
+                }
 
-        if (readPermission == PermissionStatus.Granted)
-        {
-            LoadImagesFromCameraRoll(); // Теперь использует MediaStore
+                if (readMediaResult != PermissionStatus.Granted)
+                {
+                    await DisplayAlert("Требуется доступ", "Разрешите доступ к фотографиям для работы с галереей", "OK");
+                    return;
+                }
+            }
+            else // Для старых версий Android
+            {
+                var readResult = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+                if (readResult != PermissionStatus.Granted)
+                {
+                    readResult = await Permissions.RequestAsync<Permissions.StorageRead>();
+                }
+
+                var writeResult = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+                if (writeResult != PermissionStatus.Granted)
+                {
+                    writeResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
+                }
+
+                if (readResult != PermissionStatus.Granted || writeResult != PermissionStatus.Granted)
+                {
+                    await DisplayAlert("Требуется доступ", "Разрешите доступ к хранилищу для работы с галереей", "OK");
+                    return;
+                }
+            }
+
+            await LoadImages();
         }
-        else
+        catch (PermissionException pex)
         {
-            await DisplayAlert("Нет разрешения", "Не удалось получить доступ к хранилищу для загрузки изображений.", "OK");
+            await DisplayAlert("Ошибка доступа", $"Не удалось получить разрешения: {pex.Message}", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ошибка", $"Произошла ошибка при загрузке изображений: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 
-    private void LoadImagesFromCameraRoll()
+
+    private async Task LoadImages()
     {
+        // Очищаем предыдущие изображения
         Images.Clear();
+        SelectedImage = null;
 
-#if ANDROID
-            Images.Clear();
-            var context = Platform.AppContext; 
-            var contentResolver = context.ContentResolver;
-
-            string[] projection = {
-                Android.Provider.MediaStore.MediaColumns.Id,
-                Android.Provider.MediaStore.MediaColumns.DisplayName,
-                Android.Provider.MediaStore.MediaColumns.Data, 
-                Android.Provider.MediaStore.MediaColumns.DateTaken
-            };
-
-            var queryUri = Android.Provider.MediaStore.Images.Media.ExternalContentUri;
-            
-            string selection = Android.Provider.MediaStore.Images.ImageColumns.BucketDisplayName + " = ?";
-            string[] selectionArgs = { "Camera" }; 
-
-            string sortOrder = Android.Provider.MediaStore.MediaColumns.DateTaken + " DESC";
-
-            ICursor imageCursor = null;
-            try
-            {
-                imageCursor = contentResolver.Query(queryUri, projection, selection, selectionArgs, sortOrder);
-
-                if (imageCursor != null)
-                {
-                    int idColumn = imageCursor.GetColumnIndexOrThrow(Android.Provider.MediaStore.MediaColumns.Id);
-                    int displayNameColumn = imageCursor.GetColumnIndexOrThrow(Android.Provider.MediaStore.MediaColumns.DisplayName);
-                    int dataColumn = imageCursor.GetColumnIndexOrThrow(Android.Provider.MediaStore.MediaColumns.Data);
-                    int dateTakenColumn = imageCursor.GetColumnIndexOrThrow(Android.Provider.MediaStore.MediaColumns.DateTaken);
-
-                    while (imageCursor.MoveToNext())
-                    {
-                        long id = imageCursor.GetLong(idColumn);
-                        string displayName = imageCursor.GetString(displayNameColumn);
-                        string filePath = imageCursor.GetString(dataColumn); 
-                        long dateTakenMillis = imageCursor.GetLong(dateTakenColumn);
-
-                        DateTime creationDate = DateTimeOffset.FromUnixTimeMilliseconds(dateTakenMillis).LocalDateTime;
-                        Android.Net.Uri itemUri = Android.Content.ContentUris.WithAppendedId(queryUri, id); 
-
-                        if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
-                        {
-                            Images.Add(new ImageItem
-                            {
-                                MediaStoreId = id,
-                                FilePath = filePath, 
-                                FileName = displayName,
-                                Source = ImageSource.FromStream(() => contentResolver.OpenInputStream(itemUri)),
-                                CreationDate = creationDate
-                            });
-                        }
-                        else
-                        {
-                             System.Diagnostics.Debug.WriteLine($"Skipping MediaStore item. FilePath: {filePath}, ItemUri: {itemUri}");
-                        }
-                    }
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("MediaStore query returned null cursor for Camera bucket.");
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error loading images from MediaStore: {ex.Message}");
-                MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    await DisplayAlert("Ошибка MediaStore", $"Не удалось загрузить изображения: {ex.Message}", "OK");
-                });
-            }
-            finally
-            {
-                imageCursor?.Close(); 
-            }
-            if (!Images.Any())
-            {
-                 System.Diagnostics.Debug.WriteLine("No images found in Camera bucket via MediaStore or an error occurred.");
-            }
-#else
-        // Код для других платформ или если ANDROID не определен
-        MainThread.BeginInvokeOnMainThread(async () =>
+        try
         {
-            await DisplayAlert("Не реализовано", "Загрузка изображений через MediaStore доступна только для Android.", "OK");
-        });
-#endif
+            var images = await _galleryService.LoadImagesAsync();
+
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                foreach (var image in images)
+                {
+                    Images.Add(image);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await DisplayAlert("Ошибка", $"Не удалось загрузить изображения: {ex.Message}", "OK");
+            });
+        }
     }
 
+    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        SelectedImage = e.CurrentSelection.FirstOrDefault() as ImageItem;
+    }
 
     private async void OpenButton_Clicked(object sender, EventArgs e)
     {
-        if (SelectedImage != null)
-        {
-            await Navigation.PushAsync(new ImageViewerPage(SelectedImage.FilePath, SelectedImage.CreationDate));
-        }
-        else
+        if (SelectedImage == null)
         {
             await DisplayAlert("Не выбрано", "Пожалуйста, выберите изображение для открытия.", "OK");
+            return;
         }
-    }
 
+        if (!File.Exists(SelectedImage.FilePath))
+        {
+            await DisplayAlert("Ошибка", "Файл изображения не найден или недоступен.", "OK");
+            Images.Remove(SelectedImage);
+            SelectedImage = null;
+            return;
+        }
+
+        await Navigation.PushAsync(new ImageViewerPage(SelectedImage.FilePath, SelectedImage.CreationDate));
+    }
 
     private async void DeleteButton_Clicked(object sender, EventArgs e)
     {
@@ -187,89 +193,44 @@ public partial class GalleryPage : ContentPage, INotifyPropertyChanged
             return;
         }
 
-        bool confirm = await DisplayAlert("Удалить изображение?", $"Вы уверены, что хотите удалить {SelectedImage.FileName}?", "Да", "Нет");
+        bool confirm = await DisplayAlert("Удалить изображение?",
+            $"Вы уверены, что хотите удалить {SelectedImage.FileName}?", "Да", "Нет");
+
         if (!confirm) return;
 
-#if ANDROID
-            var context = Platform.AppContext;
-            var contentResolver = context.ContentResolver;
-            // Формируем URI для конкретного изображения в MediaStore, используя его ID
-            Android.Net.Uri itemUri = ContentUris.WithAppendedId(MediaStore.Images.Media.ExternalContentUri, SelectedImage.MediaStoreId);
-
-            try
-            {
-                // Пытаемся удалить изображение через ContentResolver
-                // Для Android 10 (API 29) это может выбросить RecoverableSecurityException, если у приложения нет прав
-                // на удаление этого файла. Для Android 11+ (API 30) предпочтительнее MediaStore.createDeleteRequest,
-                // но это значительно усложнит код (требует обработки ActivityResult).
-                // Этот упрощенный вариант попытается удалить и сообщит об ошибке.
-                int rowsDeleted = contentResolver.Delete(itemUri, null, null);
-
-                if (rowsDeleted > 0)
-                {
-                    Images.Remove(SelectedImage);
-                    SelectedImage = null;
-                    await DisplayAlert("Удалено", "Изображение успешно удалено.", "OK");
-                }
-                else
-                {
-                    // Если rowsDeleted == 0, файл мог быть уже удален, или нет прав.
-                    // Проверим, существует ли он еще по старому пути (хотя это менее надежно)
-                    if (!System.IO.File.Exists(SelectedImage.FilePath) && Images.Contains(SelectedImage))
-                    {
-                        // Если файла нет и он в списке, просто убираем из списка
-                        Images.Remove(SelectedImage);
-                        SelectedImage = null;
-                        await DisplayAlert("Удалено", "Изображение удалено (или уже было удалено).", "OK");
-                    }
-                    else
-                    {
-                        await DisplayAlert("Ошибка", "Не удалось удалить изображение через MediaStore (возможно, нет прав или файл уже удален).", "OK");
-                    }
-                }
-            }
-            catch (Java.Lang.SecurityException secEx) // Явно ловим SecurityException
-            {
-                System.Diagnostics.Debug.WriteLine($"MediaStore delete SecurityException: {secEx.Message}");
-                // На Android 10 это может быть RecoverableSecurityException.
-                // Для упрощения просто выводим сообщение.
-                await DisplayAlert("Ошибка безопасности", $"Не удалось удалить изображение: {secEx.Message}. Приложению может требоваться разрешение на изменение этого файла.", "OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error deleting image via MediaStore: {ex.Message}");
-                await DisplayAlert("Ошибка удаления", $"Не удалось удалить изображение: {ex.Message}", "OK");
-            }
-#else
-        // Код для других платформ (ваш предыдущий File.Delete)
         try
         {
-            if (File.Exists(SelectedImage.FilePath))
+            bool deleted = await _galleryService.DeleteImageAsync(SelectedImage);
+
+            if (deleted)
             {
-                File.Delete(SelectedImage.FilePath);
                 Images.Remove(SelectedImage);
                 SelectedImage = null;
-                await DisplayAlert("Удалено", "Изображение успешно удалено (файловая система).", "OK");
+                await DisplayAlert("Удалено", "Изображение успешно удалено.", "OK");
             }
             else
             {
-                await DisplayAlert("Ошибка", "Файл не найден.", "OK");
-                if (Images.Contains(SelectedImage)) Images.Remove(SelectedImage);
-                SelectedImage = null;
+                // Проверяем, существует ли файл физически
+                if (!File.Exists(SelectedImage.FilePath))
+                {
+                    Images.Remove(SelectedImage);
+                    SelectedImage = null;
+                    await DisplayAlert("Обновлено", "Изображение удалено из списка (файл не существует).", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Ошибка", "Не удалось удалить изображение.", "OK");
+                }
             }
+        }
+        catch (GalleryAccessException ex)
+        {
+            await DisplayAlert("Ошибка", ex.Message, "OK");
         }
         catch (Exception ex)
         {
             await DisplayAlert("Ошибка удаления", $"Не удалось удалить изображение: {ex.Message}", "OK");
         }
-#endif
     }
 
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 }
-
