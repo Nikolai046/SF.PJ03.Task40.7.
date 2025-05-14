@@ -57,7 +57,10 @@ namespace SF.PJ03.Task40._7_.Pages
                     var pinHashинBytes = SHA256.HashData(Encoding.UTF8.GetBytes(pin));
                     var pinHash = Convert.ToHexString(pinHashинBytes);
                     await SecureStorage.Default.SetAsync("UserPin", pinHash);
+                    await Task.Delay(2000);
                     this.Title = "Запускаем приложение";
+                    if (Application.Current != null)
+                        Application.Current.MainPage = new NavigationPage(new GalleryPage());
                 }
             }
         }

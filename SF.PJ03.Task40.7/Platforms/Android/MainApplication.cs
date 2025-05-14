@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace SF.PJ03.Task40._7_
+namespace SF.PJ03.Task40._7_.Platforms.Android
 {
     [Application]
     public class MainApplication : MauiApplication

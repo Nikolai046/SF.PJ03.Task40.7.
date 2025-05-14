@@ -2,8 +2,43 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SF.PJ03.Task40._7_.Pages.GalleryPage">
-    <ContentPage.Content>
+             xmlns:models="clr-namespace:SF.PJ03.Task40._7_.Models"
+             x:Class="SF.PJ03.Task40._7_.Pages.GalleryPage"
+             Title="Галерея"
+             Shell.NavBarIsVisible="False">
 
-    </ContentPage.Content>
+    <Grid RowDefinitions="*, Auto">
+
+        <CollectionView x:Name="ImageCollectionView"
+                        Grid.Row="0"
+                        ItemsSource="{Binding Images}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedImage, Mode=TwoWay}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ImageItem">
+                    <Frame Padding="5" Margin="5" BorderColor="LightGray" CornerRadius="5" HasShadow="True">
+                        <VerticalStackLayout Spacing="5">
+                            <Image Source="{Binding Source}"
+                                   Aspect="AspectFill"
+                                   HeightRequest="100"
+                                   WidthRequest="100" />
+                            <Label Text="{Binding FileName}"
+                                   HorizontalOptions="Center"
+                                   FontSize="Micro"
+                                   LineBreakMode="TailTruncation"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <VerticalStackLayout Grid.Row="1" Padding="10" Spacing="10">
+            <Button Text="Открыть" Clicked="OpenButton_Clicked" />
+            <Button Text="Удалить" Clicked="DeleteButton_Clicked" BackgroundColor="DarkRed" TextColor="White"/>
+        </VerticalStackLayout>
+    </Grid>
+
 </ContentPage>

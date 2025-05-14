@@ -66,6 +66,9 @@
 	  <Compile Update="Pages\GalleryPage.xaml.cs">
 	    <DependentUpon>GalleryPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\ImageViewerPage.xaml.cs">
+	    <DependentUpon>ImageViewerPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\SignInPage.xaml.cs">
 	    <DependentUpon>SignInPage.xaml</DependentUpon>
 	  </Compile>
@@ -78,16 +81,15 @@
 	  <MauiXaml Update="Pages\GalleryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\ImageViewerPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\SignInPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\SignUpPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Models\" />
 	</ItemGroup>
 
 </Project>

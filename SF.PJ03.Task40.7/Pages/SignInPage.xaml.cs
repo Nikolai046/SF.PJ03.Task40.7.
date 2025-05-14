@@ -52,7 +52,9 @@ public partial class SignInPage : ContentPage
             else
             {
                 //this.Title = "Запускаем приложение";
-                await Shell.Current.GoToAsync("GalleryPage", true);
+                if (Application.Current != null) Application.Current.MainPage = new NavigationPage(new GalleryPage());
+
+                //await Shell.Current.GoToAsync("GalleryPage", true);
             }
         }
     }
