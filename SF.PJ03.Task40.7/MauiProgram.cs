@@ -28,7 +28,6 @@ namespace SF.PJ03.Task40._7_
         private static void RegisterServices(IServiceCollection services)
         {
 #if ANDROID
-            //services.AddTransient<IGalleryService, AndroidGalleryService>();
             services.AddTransient<IGalleryService, SF.PJ03.Task40._7_.Platforms.Android.Services.AndroidGalleryService>();
 #else
             services.AddTransient<IGalleryService, DefaultGalleryService>();

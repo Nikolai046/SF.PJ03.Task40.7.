@@ -2,7 +2,7 @@
 
 namespace SF.PJ03.Task40._7_.Models;
 
-public class ImageItem : INotifyPropertyChanged
+public partial class ImageItem : INotifyPropertyChanged
 {
     private string _filePath;
     public string FilePath

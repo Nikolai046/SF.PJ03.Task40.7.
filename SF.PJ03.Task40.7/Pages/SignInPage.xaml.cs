@@ -9,7 +9,7 @@ public partial class SignInPage : ContentPage
 {
     private readonly Color _filledColor = Colors.Gray;
     private readonly Color _emptyColor = Colors.Transparent;
-    private string? storedPinHash;
+    private readonly string? _storedPinHash;
     private readonly Border[] _pinDots;
 
 
@@ -17,7 +17,7 @@ public partial class SignInPage : ContentPage
     {
         InitializeComponent();
         _pinDots = [digit1, digit2, digit3, digit4];
-        storedPinHash = SecureStorage.Default.GetAsync("UserPin").Result;
+        _storedPinHash = SecureStorage.Default.GetAsync("UserPin").Result;
     }
 
     protected override void OnAppearing()
@@ -43,7 +43,7 @@ public partial class SignInPage : ContentPage
         if (isPinComplete)
         {
             var enteredPinHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(pin)));
-            var isPinValid = enteredPinHash == storedPinHash;
+            var isPinValid = enteredPinHash == _storedPinHash;
             pinLabelText.Text = isPinValid ? "PIN-код принят" : "PIN-код неверный";
             pinLabelText.TextColor = isPinValid ? Colors.Green : Colors.Red;
 

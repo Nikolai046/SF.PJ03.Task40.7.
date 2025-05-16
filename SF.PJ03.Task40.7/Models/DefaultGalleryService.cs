@@ -6,10 +6,10 @@ public class DefaultGalleryService : IGalleryService
     {
         // Базовая реализация по умолчанию
         // Можно реализовать общий код для других платформ
-        return new List<ImageItem>();
+        return [];
     }
 
-    public async Task<bool> DeleteImageAsync(ImageItem image)
+    public async Task<bool> DeleteImageAsync(ImageItem? image)
     {
         if (!File.Exists(image.FilePath))
             return false;

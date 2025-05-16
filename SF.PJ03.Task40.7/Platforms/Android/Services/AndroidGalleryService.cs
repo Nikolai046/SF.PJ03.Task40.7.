@@ -1,7 +1,11 @@
 ﻿#if ANDROID
+using Android.App;
 using Android.Content;
+using Android.Media;
+using Android.OS;
 using Android.Provider;
-using Microsoft.Maui.Controls.PlatformConfiguration;
+using AndroidX.Activity.Result;
+using Java.Util;
 using SF.PJ03.Task40._7_.Models;
 using SF.PJ03.Task40._7_.Services;
 
@@ -15,12 +19,12 @@ public class AndroidGalleryService : IGalleryService
         var context = Platform.AppContext;
         var contentResolver = context.ContentResolver;
 
-        string[] projection = {
-                MediaStore.MediaColumns.Id,
-                MediaStore.MediaColumns.DisplayName,
-                MediaStore.MediaColumns.Data,
-                MediaStore.MediaColumns.DateTaken
-            };
+        string[] projection = [
+            MediaStore.MediaColumns.Id,
+            MediaStore.MediaColumns.DisplayName,
+            MediaStore.MediaColumns.Data,
+            MediaStore.MediaColumns.DateTaken
+        ];
 
         var queryUri = MediaStore.Images.Media.ExternalContentUri;
         string sortOrder = MediaStore.MediaColumns.DateTaken + " DESC";
@@ -73,7 +77,7 @@ public class AndroidGalleryService : IGalleryService
         return results;
     }
 
-    public async Task<bool> DeleteImageAsync(ImageItem image)
+    public async Task<bool> DeleteImageAsync(ImageItem? image)
     {
         var context = Platform.AppContext;
         var contentResolver = context.ContentResolver;
@@ -83,7 +87,7 @@ public class AndroidGalleryService : IGalleryService
 
         try
         {
-            int rowsDeleted = contentResolver.Delete(itemUri, null, null);
+            var rowsDeleted = contentResolver.Delete(itemUri, null, null);
             return rowsDeleted > 0;
         }
         catch (Java.Lang.SecurityException secEx)
@@ -97,6 +101,7 @@ public class AndroidGalleryService : IGalleryService
             throw new GalleryAccessException($"Ошибка удаления изображения: {ex.Message}", ex);
         }
     }
-}
 
+
+}
 #endif

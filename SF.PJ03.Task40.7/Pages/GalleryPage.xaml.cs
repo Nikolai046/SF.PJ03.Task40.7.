@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows.Input;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using SF.PJ03.Task40._7_.Models;
@@ -11,8 +10,8 @@ public partial class GalleryPage : ContentPage
 {
     private readonly IGalleryService _galleryService;
 
-    private ObservableCollection<ImageItem> _images;
-    public ObservableCollection<ImageItem> Images
+    private ObservableCollection<ImageItem?> _images = null!;
+    public ObservableCollection<ImageItem?> Images
     {
         get => _images;
         set
@@ -23,8 +22,8 @@ public partial class GalleryPage : ContentPage
         }
     }
 
-    private ImageItem _selectedImage;
-    public ImageItem SelectedImage
+    private ImageItem? _selectedImage;
+    public ImageItem? SelectedImage
     {
         get => _selectedImage;
         set
@@ -56,7 +55,7 @@ public partial class GalleryPage : ContentPage
     {
         InitializeComponent();
         _galleryService = galleryService;
-        Images = new ObservableCollection<ImageItem>();
+        Images = [];
         BindingContext = this;
         SelectImageCommand = new Command(ExecuteSelectImage);
     }
@@ -163,7 +162,7 @@ public partial class GalleryPage : ContentPage
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        SelectedImage = e.CurrentSelection.FirstOrDefault() as ImageItem;
+        SelectedImage = e.CurrentSelection.Count > 0 ? e.CurrentSelection[0] as ImageItem : null;
     }
 
     private async void OpenButton_Clicked(object sender, EventArgs e)
