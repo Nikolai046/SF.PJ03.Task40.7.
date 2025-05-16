@@ -3,5 +3,6 @@
 public interface IGalleryService
 {
     Task<List<ImageItem>> LoadImagesAsync();
+
     Task<bool> DeleteImageAsync(ImageItem? image);
 }

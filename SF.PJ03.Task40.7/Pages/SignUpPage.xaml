@@ -6,54 +6,54 @@
 
     <ContentPage.Resources>
         <Style x:Key="PinDotStyle" TargetType="Border">
-            <Setter Property="HeightRequest" Value="50"/>
-            <Setter Property="WidthRequest" Value="50"/>
-            <Setter Property="Stroke" Value="Black"/>
-            <Setter Property="StrokeThickness" Value="2"/>
-            <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
-            <Setter Property="BackgroundColor" Value="Transparent"/>
-            <Setter Property="IsEnabled" Value="True"/>
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="WidthRequest" Value="50" />
+            <Setter Property="Stroke" Value="Black" />
+            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="IsEnabled" Value="True" />
         </Style>
     </ContentPage.Resources>
 
     <Grid>
-        <VerticalStackLayout VerticalOptions="Center" 
-                             HorizontalOptions="Center" 
+        <VerticalStackLayout VerticalOptions="Center"
+                             HorizontalOptions="Center"
                              Spacing="20">
 
             <!-- Кружки для PIN-кода -->
-            <HorizontalStackLayout x:Name="pinField" 
-                                   HorizontalOptions="Center" 
+            <HorizontalStackLayout x:Name="pinField"
+                                   HorizontalOptions="Center"
                                    Spacing="20">
                 <HorizontalStackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnPinFieldTapped"/>
+                    <TapGestureRecognizer Tapped="OnPinFieldTapped" />
                 </HorizontalStackLayout.GestureRecognizers>
-                <Border x:Name="digit1" Style="{StaticResource PinDotStyle}"/>
-                <Border x:Name="digit2" Style="{StaticResource PinDotStyle}"/>
-                <Border x:Name="digit3" Style="{StaticResource PinDotStyle}"/>
-                <Border x:Name="digit4" Style="{StaticResource PinDotStyle}"/>
+                <Border x:Name="digit1" Style="{StaticResource PinDotStyle}" />
+                <Border x:Name="digit2" Style="{StaticResource PinDotStyle}" />
+                <Border x:Name="digit3" Style="{StaticResource PinDotStyle}" />
+                <Border x:Name="digit4" Style="{StaticResource PinDotStyle}" />
             </HorizontalStackLayout>
 
             <!-- Надпись -->
-            <Label x:Name="pinLabelText" 
-                   FontSize="16" 
-                   HorizontalOptions="Center"/>
+            <Label x:Name="pinLabelText"
+                   FontSize="16"
+                   HorizontalOptions="Center" />
 
             <!-- Кнопка -->
-            <Button x:Name="submitButton" 
-                    Text="Submit" 
-                    FontSize="20" 
-                    IsEnabled="False" 
-                    Clicked="SubmitButton_OnClicked"/>
+            <Button x:Name="submitButton"
+                    Text="Submit"
+                    FontSize="20"
+                    IsEnabled="False"
+                    Clicked="SubmitButton_OnClicked" />
 
             <!-- Скрытое поле ввода -->
-            <Entry x:Name="pinEntry" 
-                   MaxLength="4" 
-                   Keyboard="Numeric" 
-                   IsPassword="True" 
-                   Opacity="0" 
+            <Entry x:Name="pinEntry"
+                   MaxLength="4"
+                   Keyboard="Numeric"
+                   IsPassword="True"
+                   Opacity="0"
                    IsEnabled="True"
-                   TextChanged="OnPinChanged"/>
+                   TextChanged="OnPinChanged" />
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

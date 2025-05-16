@@ -4,8 +4,6 @@ public class DefaultGalleryService : IGalleryService
 {
     public async Task<List<ImageItem>> LoadImagesAsync()
     {
-        // Базовая реализация по умолчанию
-        // Можно реализовать общий код для других платформ
         return [];
     }
 

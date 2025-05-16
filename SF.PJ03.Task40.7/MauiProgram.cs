@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using SF.PJ03.Task40._7_.Models;
 
-
 namespace SF.PJ03.Task40._7_
 {
     public static class MauiProgram
@@ -25,6 +24,7 @@ namespace SF.PJ03.Task40._7_
 
             return builder.Build();
         }
+
         private static void RegisterServices(IServiceCollection services)
         {
 #if ANDROID

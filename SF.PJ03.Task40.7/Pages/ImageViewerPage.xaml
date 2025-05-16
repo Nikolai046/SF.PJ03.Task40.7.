@@ -5,16 +5,15 @@
              x:Class="SF.PJ03.Task40._7_.Pages.ImageViewerPage"
              Title="Просмотр изображения">
 
-	<Grid Padding="10" RowDefinitions="*, Auto" RowSpacing="10">
+    <Grid Padding="10" RowDefinitions="*, Auto" RowSpacing="10">
 
-		<Image x:Name="FullImage"
+        <Image x:Name="FullImage"
                Grid.Row="0"
                Aspect="AspectFit" />
 
-		<Label x:Name="CreationDateLabel"
+        <Label x:Name="CreationDateLabel"
                Grid.Row="1"
                HorizontalOptions="Center"
-               FontSize="Medium"/>
-	</Grid>
-
+               FontSize="Medium" />
+    </Grid>
 </ContentPage>

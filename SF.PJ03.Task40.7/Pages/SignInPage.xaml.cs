@@ -1,7 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using SF.PJ03.Task40._7_.Models;
+using System.Security.Cryptography;
 using System.Text;
-using SF.PJ03.Task40._7_.Models;
-using SF.PJ03.Task40._7_.Services;
 
 namespace SF.PJ03.Task40._7_.Pages;
 
@@ -11,7 +10,6 @@ public partial class SignInPage : ContentPage
     private readonly Color _emptyColor = Colors.Transparent;
     private readonly string? _storedPinHash;
     private readonly Border[] _pinDots;
-
 
     public SignInPage()
     {
@@ -54,7 +52,6 @@ public partial class SignInPage : ContentPage
             }
             else
             {
-
                 // Получаем сервис через контейнер зависимостей
                 var mauiContext = Application.Current.Handler.MauiContext;
                 var galleryService = mauiContext.Services.GetService<IGalleryService>();
@@ -69,8 +66,6 @@ public partial class SignInPage : ContentPage
                 var galleryPage = new GalleryPage(galleryService);
 
                 if (Application.Current != null) Application.Current.MainPage = new NavigationPage(galleryPage);
-
-                //await Shell.Current.GoToAsync("GalleryPage", true);
             }
         }
     }

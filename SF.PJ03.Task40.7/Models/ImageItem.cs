@@ -5,6 +5,7 @@ namespace SF.PJ03.Task40._7_.Models;
 public partial class ImageItem : INotifyPropertyChanged
 {
     private string _filePath;
+
     public string FilePath
     {
         get => _filePath;
@@ -17,6 +18,7 @@ public partial class ImageItem : INotifyPropertyChanged
     }
 
     private string _fileName;
+
     public string FileName
     {
         get => _fileName;
@@ -29,6 +31,7 @@ public partial class ImageItem : INotifyPropertyChanged
     }
 
     private ImageSource _source;
+
     public ImageSource Source
     {
         get => _source;
@@ -41,6 +44,7 @@ public partial class ImageItem : INotifyPropertyChanged
     }
 
     private DateTime _creationDate;
+
     public DateTime CreationDate
     {
         get => _creationDate;
@@ -65,7 +69,8 @@ public partial class ImageItem : INotifyPropertyChanged
     }
 
     // Конструкторы
-    public ImageItem() { }
+    public ImageItem()
+    { }
 
     public ImageItem(string filePath, string fileName, DateTime creationDate, long mediaStoreId = 0)
     {
@@ -77,6 +82,7 @@ public partial class ImageItem : INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
+
     protected virtual void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

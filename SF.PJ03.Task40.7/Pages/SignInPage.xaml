@@ -5,49 +5,49 @@
              x:Class="SF.PJ03.Task40._7_.Pages.SignInPage"
              Title="Sign in application">
 
-	<ContentPage.Resources>
-		<Style x:Key="PinDotStyle" TargetType="Border">
-			<Setter Property="HeightRequest" Value="50"/>
-			<Setter Property="WidthRequest" Value="50"/>
-			<Setter Property="Stroke" Value="Black"/>
-			<Setter Property="StrokeThickness" Value="2"/>
-			<Setter Property="StrokeShape" Value="RoundRectangle 15"/>
-			<Setter Property="BackgroundColor" Value="Transparent"/>
-			<Setter Property="IsEnabled" Value="True"/>
-		</Style>
-	</ContentPage.Resources>
+    <ContentPage.Resources>
+        <Style x:Key="PinDotStyle" TargetType="Border">
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="WidthRequest" Value="50" />
+            <Setter Property="Stroke" Value="Black" />
+            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="IsEnabled" Value="True" />
+        </Style>
+    </ContentPage.Resources>
 
-	<Grid>
-		<VerticalStackLayout VerticalOptions="Center"
+    <Grid>
+        <VerticalStackLayout VerticalOptions="Center"
 							 HorizontalOptions="Center"
 							 Spacing="20">
 
-			<!-- Кружки для PIN-кода -->
-			<HorizontalStackLayout x:Name="pinField"
+            <!-- Кружки для PIN-кода -->
+            <HorizontalStackLayout x:Name="pinField"
 								   HorizontalOptions="Center"
 								   Spacing="20">
-				<HorizontalStackLayout.GestureRecognizers>
-					<TapGestureRecognizer Tapped="OnPinFieldTapped"/>
-				</HorizontalStackLayout.GestureRecognizers>
-				<Border x:Name="digit1" Style="{StaticResource PinDotStyle}"/>
-				<Border x:Name="digit2" Style="{StaticResource PinDotStyle}"/>
-				<Border x:Name="digit3" Style="{StaticResource PinDotStyle}"/>
-				<Border x:Name="digit4" Style="{StaticResource PinDotStyle}"/>
-			</HorizontalStackLayout>
+                <HorizontalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPinFieldTapped" />
+                </HorizontalStackLayout.GestureRecognizers>
+                <Border x:Name="digit1" Style="{StaticResource PinDotStyle}" />
+                <Border x:Name="digit2" Style="{StaticResource PinDotStyle}" />
+                <Border x:Name="digit3" Style="{StaticResource PinDotStyle}" />
+                <Border x:Name="digit4" Style="{StaticResource PinDotStyle}" />
+            </HorizontalStackLayout>
 
-			<!-- Надпись -->
-			<Label x:Name="pinLabelText"
+            <!-- Надпись -->
+            <Label x:Name="pinLabelText"
 				   FontSize="16"
-				   HorizontalOptions="Center"/>
+				   HorizontalOptions="Center" />
 
-			<!-- Скрытое поле ввода -->
-			<Entry x:Name="pinEntry"
+            <!-- Скрытое поле ввода -->
+            <Entry x:Name="pinEntry"
 				   MaxLength="4"
 				   Keyboard="Numeric"
 				   IsPassword="True"
 				   Opacity="0"
 				   IsEnabled="True"
-				   TextChanged="OnPinChanged"/>
-		</VerticalStackLayout>
-	</Grid>
+				   TextChanged="OnPinChanged" />
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>

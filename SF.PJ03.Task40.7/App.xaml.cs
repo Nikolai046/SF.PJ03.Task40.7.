@@ -9,8 +9,6 @@ namespace SF.PJ03.Task40._7_
             InitializeComponent();
 
             MainPage = new AppShell();
-            //MainPage = new SignUpPage();
-            //MainPage = new MainPage();
         }
     }
 }

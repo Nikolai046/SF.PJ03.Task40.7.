@@ -2,6 +2,11 @@
 
 public class GalleryAccessException : Exception
 {
-    public GalleryAccessException(string message) : base(message) { }
-    public GalleryAccessException(string message, Exception innerException) : base(message, innerException) { }
+    public GalleryAccessException(string message) : base(message)
+    {
+    }
+
+    public GalleryAccessException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }

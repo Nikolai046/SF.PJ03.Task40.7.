@@ -4,9 +4,6 @@
     {
         public AppShell()
         {
-            // Удаление
-            //SecureStorage.Default.Remove("UserPin");
-
             InitializeComponent();
 
             Routing.RegisterRoute("GalleryPage", typeof(GalleryPage));
@@ -19,7 +16,6 @@
             };
 
             this.Items.Add(content);
-
         }
     }
 }

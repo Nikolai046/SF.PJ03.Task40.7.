@@ -1,8 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using SF.PJ03.Task40._7_.Models;
+﻿using SF.PJ03.Task40._7_.Models;
 using SF.PJ03.Task40._7_.Services;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace SF.PJ03.Task40._7_.Pages;
 
@@ -11,6 +10,7 @@ public partial class GalleryPage : ContentPage
     private readonly IGalleryService _galleryService;
 
     private ObservableCollection<ImageItem?> _images = null!;
+
     public ObservableCollection<ImageItem?> Images
     {
         get => _images;
@@ -23,6 +23,7 @@ public partial class GalleryPage : ContentPage
     }
 
     private ImageItem? _selectedImage;
+
     public ImageItem? SelectedImage
     {
         get => _selectedImage;
@@ -33,11 +34,11 @@ public partial class GalleryPage : ContentPage
             OnPropertyChanged(nameof(SelectedImage));
             OnPropertyChanged(nameof(IsImageSelected));
             ImageCollectionView.SelectedItem = value;
-
         }
     }
 
     private bool _isLoading;
+
     public bool IsLoading
     {
         get => _isLoading;
@@ -45,9 +46,9 @@ public partial class GalleryPage : ContentPage
         {
             if (_isLoading == value) return;
             _isLoading = value;
-            // OnPropertyChanged(nameof(IsLoading));
         }
     }
+
     public ICommand SelectImageCommand { get; }
     public bool IsImageSelected => SelectedImage != null;
 
@@ -131,7 +132,6 @@ public partial class GalleryPage : ContentPage
             IsLoading = false;
         }
     }
-
 
     private async Task LoadImages()
     {
@@ -231,5 +231,4 @@ public partial class GalleryPage : ContentPage
             await DisplayAlert("Ошибка удаления", $"Не удалось удалить изображение: {ex.Message}", "OK");
         }
     }
-
 }

@@ -17,8 +17,8 @@
 
     <Grid RowDefinitions="*, Auto">
         <!-- Индикатор загрузки -->
-        <ActivityIndicator Grid.Row="0" 
-                          IsRunning="{Binding IsLoading}" 
+        <ActivityIndicator Grid.Row="0"
+                          IsRunning="{Binding IsLoading}"
                           IsVisible="{Binding IsLoading}"
                           HorizontalOptions="Center"
                           VerticalOptions="Center" />
@@ -39,7 +39,7 @@
                     <Frame Padding="5" Margin="5" BorderColor="LightGray" CornerRadius="5" HasShadow="True">
 
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer 
+                            <TapGestureRecognizer
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type local:GalleryPage}}, Path=SelectImageCommand}"
                                 CommandParameter="{Binding .}" />
                         </Frame.GestureRecognizers>
@@ -61,17 +61,15 @@
                             <Label Text="{Binding FileName}"
                                    HorizontalOptions="Center"
                                    FontSize="Micro"
-                                   LineBreakMode="TailTruncation"/>
+                                   LineBreakMode="TailTruncation" />
                         </VerticalStackLayout>
-
                     </Frame>
                 </DataTemplate>
-
             </CollectionView.ItemTemplate>
             <CollectionView.EmptyView>
                 <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                    <Label Text="Нет доступных изображений" 
-                           HorizontalOptions="Center" 
+                    <Label Text="Нет доступных изображений"
+                           HorizontalOptions="Center"
                            TextColor="Gray" />
                 </StackLayout>
             </CollectionView.EmptyView>
@@ -79,9 +77,8 @@
 
         <VerticalStackLayout Grid.Row="1" Padding="10" Spacing="10">
             <Button x:Name="OpenButton" Text="Открыть" Clicked="OpenButton_Clicked" IsEnabled="{Binding IsImageSelected}" />
-            <Button x:Name="DeleteButton" Text="Удалить" Clicked="DeleteButton_Clicked" 
-                   BackgroundColor="DarkRed" TextColor="White" IsEnabled="{Binding IsImageSelected}"/>
+            <Button x:Name="DeleteButton" Text="Удалить" Clicked="DeleteButton_Clicked"
+                   BackgroundColor="DarkRed" TextColor="White" IsEnabled="{Binding IsImageSelected}" />
         </VerticalStackLayout>
     </Grid>
-
 </ContentPage>

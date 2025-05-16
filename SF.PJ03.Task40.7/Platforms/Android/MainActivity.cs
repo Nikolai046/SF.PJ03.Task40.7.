@@ -1,24 +1,14 @@
 ﻿using Android;
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using AndroidX.Core.App;
 
 namespace SF.PJ03.Task40._7_.Platforms.Android;
 
 [Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, LaunchMode = LaunchMode.SingleTop, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity
 {
-    //protected override void OnCreate(Bundle? savedInstanceState)
-    //{
-    //    base.OnCreate(savedInstanceState);
-    //    //Запрос разрешений
-    //    ActivityCompat.RequestPermissions(this,
-    //        [Manifest.Permission.ReadExternalStorage],
-    //        1);
-
-    //}
-
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
@@ -39,5 +29,12 @@ public class MainActivity : MauiAppCompatActivity
                 RequestPermissions([Manifest.Permission.ReadExternalStorage], 1002);
             }
         }
+    }
+
+    protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+    {
+        base.OnActivityResult(requestCode, resultCode, data);
+        // Передаем результат в обработчик
+        SF.PJ03.Task40._7_.Platforms.Android.Helpers.PendingIntentRequester.OnActivityResult(requestCode, resultCode, data);
     }
 }
