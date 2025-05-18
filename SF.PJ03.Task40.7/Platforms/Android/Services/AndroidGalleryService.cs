@@ -8,8 +8,12 @@ using SF.PJ03.Task40._7_.Services;
 
 namespace SF.PJ03.Task40._7_.Platforms.Android.Services
 {
+    /// <summary>
+    /// Реализация сервиса галереи для платформы Android, предоставляющая методы для загрузки и удаления изображений из MediaStore.
+    /// </summary>
     public class AndroidGalleryService : IGalleryService
     {
+        // Асинхронно загружает список изображений из MediaStore устройства.
         public async Task<List<ImageItem>> LoadImagesAsync()
         {
             var results = new List<ImageItem>();
@@ -80,6 +84,7 @@ namespace SF.PJ03.Task40._7_.Platforms.Android.Services
             return results;
         }
 
+        // Асинхронно удаляет указанное изображение из MediaStore, запрашивая подтверждение пользователя для Android 11+.
         public async Task<bool> DeleteImageAsync(ImageItem? image)
         {
             if (image == null)

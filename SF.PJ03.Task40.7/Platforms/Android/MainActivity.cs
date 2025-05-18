@@ -13,6 +13,7 @@ public class MainActivity : MauiAppCompatActivity
     {
         base.OnCreate(savedInstanceState);
 
+        // Логика запроса разрешений
         // Для Android 13+ (API 33)
         if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
         {
@@ -31,6 +32,7 @@ public class MainActivity : MauiAppCompatActivity
         }
     }
 
+    // Обрабатывает результат, полученный от другой Activity (например, от диалога подтверждения удаления).
     protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
     {
         base.OnActivityResult(requestCode, resultCode, data);

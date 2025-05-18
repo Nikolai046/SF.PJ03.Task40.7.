@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SF.PJ03.Task40._7_.Pages
 {
+    /// <summary>
+    /// Страница для первоначальной регистрации пользователя путем создания и подтверждения PIN-кода.
+    /// </summary>
     public partial class SignUpPage : ContentPage
     {
         private readonly Color _filledColor = Colors.Gray;
@@ -17,12 +20,14 @@ namespace SF.PJ03.Task40._7_.Pages
             _pinDots = [digit1, digit2, digit3, digit4];
         }
 
+        // Вызывается при появлении страницы, инициализирует элементы управления.
         protected override void OnAppearing()
         {
             base.OnAppearing();
             InitializePage();
         }
 
+        // Сбрасывает состояние страницы и поля ввода PIN-кода для нового ввода или подтверждения.
         private async void InitializePage()
         {
             submitButton.IsVisible = true;
@@ -33,6 +38,7 @@ namespace SF.PJ03.Task40._7_.Pages
             Dispatcher.Dispatch(() => pinEntry.Focus());
         }
 
+        // Обрабатывает изменение текста в поле ввода PIN-кода, управляет логикой подтверждения PIN.
         private async void OnPinChanged(object? sender, TextChangedEventArgs e)
         {
             var pin = e.NewTextValue ?? string.Empty;
@@ -79,6 +85,7 @@ namespace SF.PJ03.Task40._7_.Pages
             }
         }
 
+        // Обновляет цвет точек PIN-кода в зависимости от введенного значения.
         private void UpdatePinDots(string pin)
         {
             for (int i = 0; i < _pinDots.Length; i++)
@@ -87,6 +94,7 @@ namespace SF.PJ03.Task40._7_.Pages
             }
         }
 
+        // Обрабатывает нажатие кнопки "Отправить", сохраняет введенный PIN-код и очищает поле ввода.
         private void SubmitButton_OnClicked(object? sender, EventArgs e)
         {
             _nonConfirmedPin = pinEntry.Text;
@@ -97,12 +105,14 @@ namespace SF.PJ03.Task40._7_.Pages
             pinEntry.Focus();
         }
 
+        // Обновляет текст метки PIN-кода в зависимости от состояния подтверждения.
         private void UpdatePinLabelText()
         {
             pinLabelText.Text = _nonConfirmedPin == null ? "Придумайте PIN-код" : "Подтвердите PIN-код";
             pinLabelText.TextColor = Colors.Black;
         }
 
+        // Обрабатывает событие нажатия на поле ввода PIN-кода, чтобы установить фокус.
         private void OnPinFieldTapped(object? sender, EventArgs e)
         {
             pinEntry.Focus();

@@ -25,6 +25,7 @@ namespace SF.PJ03.Task40._7_
             return builder.Build();
         }
 
+        // Регистрирует сервисы приложения в контейнере зависимостей.
         private static void RegisterServices(IServiceCollection services)
         {
 #if ANDROID

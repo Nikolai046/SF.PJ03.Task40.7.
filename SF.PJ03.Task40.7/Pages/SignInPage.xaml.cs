@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SF.PJ03.Task40._7_.Pages;
 
+/// <summary>
+/// Страница для входа пользователя в приложение с использованием ранее установленного PIN-кода.
+/// </summary>
 public partial class SignInPage : ContentPage
 {
     private readonly Color _filledColor = Colors.Gray;
@@ -18,12 +21,14 @@ public partial class SignInPage : ContentPage
         _storedPinHash = SecureStorage.Default.GetAsync("UserPin").Result;
     }
 
+    // Вызывается при появлении страницы, инициализирует элементы управления.
     protected override void OnAppearing()
     {
         base.OnAppearing();
         InitializePage();
     }
 
+    // Сбрасывает состояние страницы и поля ввода PIN-кода.
     private async void InitializePage()
     {
         pinEntry.Text = string.Empty;
@@ -32,6 +37,7 @@ public partial class SignInPage : ContentPage
         Dispatcher.Dispatch(() => pinEntry.Focus());
     }
 
+    // Обрабатывает изменения в поле ввода PIN-кода.
     private async void OnPinChanged(object? sender, TextChangedEventArgs e)
     {
         var pin = e.NewTextValue ?? string.Empty;
@@ -70,6 +76,7 @@ public partial class SignInPage : ContentPage
         }
     }
 
+    // Обновляет визуальное отображение введенных цифр PIN-кода (закрашивает точки).
     private void UpdatePinDots(string pin)
     {
         for (int i = 0; i < _pinDots.Length; i++)
@@ -78,12 +85,14 @@ public partial class SignInPage : ContentPage
         }
     }
 
+    // Обновляет текст подсказки для ввода PIN-кода.
     private void UpdatePinLabelText()
     {
         pinLabelText.Text = "Введите PIN-код";
         pinLabelText.TextColor = Colors.Black;
     }
 
+    // Устанавливает фокус на скрытое поле ввода PIN-кода при нажатии на область точек.
     private void OnPinFieldTapped(object? sender, EventArgs e)
     {
         pinEntry.Focus();

@@ -2,10 +2,15 @@
 
 namespace SF.PJ03.Task40._7_.Models;
 
+/// <summary>
+/// Модель, представляющая элемент изображения в галерее. 
+/// Содержит информацию о пути к файлу, имени, источнике изображения, дате создания и ID в MediaStore.
+/// </summary>
 public partial class ImageItem : INotifyPropertyChanged
 {
     private string _filePath;
 
+    // Путь к файлу изображения или URI.
     public string FilePath
     {
         get => _filePath;
@@ -19,6 +24,7 @@ public partial class ImageItem : INotifyPropertyChanged
 
     private string _fileName;
 
+    // Имя файла изображения.
     public string FileName
     {
         get => _fileName;
@@ -32,6 +38,7 @@ public partial class ImageItem : INotifyPropertyChanged
 
     private ImageSource _source;
 
+    // Источник изображения для отображения.
     public ImageSource Source
     {
         get => _source;
@@ -45,6 +52,7 @@ public partial class ImageItem : INotifyPropertyChanged
 
     private DateTime _creationDate;
 
+    // Дата создания изображения.
     public DateTime CreationDate
     {
         get => _creationDate;
@@ -83,6 +91,7 @@ public partial class ImageItem : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
+    // Вызывает событие PropertyChanged для указанного свойства.
     protected virtual void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -1,5 +1,8 @@
 ﻿namespace SF.PJ03.Task40._7_.Pages;
 
+/// <summary>
+/// Страница для просмотра полноразмерного изображения и его даты создания.
+/// </summary>
 public partial class ImageViewerPage : ContentPage
 {
     public ImageViewerPage(string imagePath, DateTime creationDate)

@@ -5,12 +5,17 @@ using System.Windows.Input;
 
 namespace SF.PJ03.Task40._7_.Pages;
 
+/// <summary>
+/// Страница для отображения галереи изображений. 
+/// Позволяет просматривать, выбирать, открывать и удалять изображения.
+/// </summary>
 public partial class GalleryPage : ContentPage
 {
     private readonly IGalleryService _galleryService;
 
     private ObservableCollection<ImageItem?> _images = null!;
 
+    // Коллекция изображений для отображения в галерее.
     public ObservableCollection<ImageItem?> Images
     {
         get => _images;
@@ -24,6 +29,7 @@ public partial class GalleryPage : ContentPage
 
     private ImageItem? _selectedImage;
 
+    // Выбранное в данный момент изображение в галерее.
     public ImageItem? SelectedImage
     {
         get => _selectedImage;
@@ -39,6 +45,7 @@ public partial class GalleryPage : ContentPage
 
     private bool _isLoading;
 
+    // Указывает, происходит ли в данный момент загрузка изображений.
     public bool IsLoading
     {
         get => _isLoading;
@@ -49,9 +56,13 @@ public partial class GalleryPage : ContentPage
         }
     }
 
+    // Команда для выбора изображения.
     public ICommand SelectImageCommand { get; }
+
+    // Указывает, выбрано ли какое-либо изображение.
     public bool IsImageSelected => SelectedImage != null;
 
+    // Инициализирует новый экземпляр страницы галереи с указанным сервисом галереи.
     public GalleryPage(IGalleryService galleryService)
     {
         InitializeComponent();
@@ -61,6 +72,7 @@ public partial class GalleryPage : ContentPage
         SelectImageCommand = new Command(ExecuteSelectImage);
     }
 
+    // Обрабатывает команду выбора изображения.
     private void ExecuteSelectImage(object param)
     {
         if (param is ImageItem image)
@@ -69,12 +81,14 @@ public partial class GalleryPage : ContentPage
         }
     }
 
+    // Вызывается при появлении страницы, инициирует загрузку изображений.
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         await RequestAndLoadImages();
     }
 
+    // Запрашивает необходимые разрешения и загружает изображения.
     private async Task RequestAndLoadImages()
     {
         IsLoading = true;
@@ -133,6 +147,7 @@ public partial class GalleryPage : ContentPage
         }
     }
 
+    // Загружает изображения с использованием сервиса галереи.
     private async Task LoadImages()
     {
         // Очищаем предыдущие изображения
@@ -160,11 +175,13 @@ public partial class GalleryPage : ContentPage
         }
     }
 
+    // Обрабатывает изменение выбранного элемента в коллекции изображений.
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         SelectedImage = e.CurrentSelection.Count > 0 ? e.CurrentSelection[0] as ImageItem : null;
     }
 
+    // Обрабатывает нажатие кнопки "Открыть", переходит на страницу просмотра изображения.
     private async void OpenButton_Clicked(object sender, EventArgs e)
     {
         if (SelectedImage == null)
@@ -184,6 +201,7 @@ public partial class GalleryPage : ContentPage
         await Navigation.PushAsync(new ImageViewerPage(SelectedImage.FilePath, SelectedImage.CreationDate));
     }
 
+    // Обрабатывает нажатие кнопки "Удалить", удаляет выбранное изображение после подтверждения.
     private async void DeleteButton_Clicked(object sender, EventArgs e)
     {
         if (SelectedImage == null)
